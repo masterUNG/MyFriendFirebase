@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <!--Content-->
+    <LinearLayout
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/login_masterung"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textSize="@dimen/h1"
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_action_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_marginLeft="@dimen/margin16"
+                android:background="@drawable/red_button"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/colorPrimaryLight"
+                android:hint="@string/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_action_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_marginLeft="@dimen/margin16"
+                android:background="@drawable/red_button"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimaryDark"
+                android:textColorHint="@color/colorPrimaryLight"
+                android:hint="@string/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:background="@drawable/red_button"
+            android:text="Login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:clickable="true"
+            android:id="@+id/txtNewRegister"
+            android:textStyle="italic"
+            android:textColor="@color/colorAccent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin16"
+            android:text="New Register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
