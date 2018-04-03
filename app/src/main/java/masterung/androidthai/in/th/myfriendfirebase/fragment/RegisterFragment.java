@@ -8,33 +8,140 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import masterung.androidthai.in.th.myfriendfirebase.MainActivity;
 import masterung.androidthai.in.th.myfriendfirebase.R;
+import masterung.androidthai.in.th.myfriendfirebase.utility.MyAlert;
 
 public class RegisterFragment extends Fragment {
 
     //    Explicit
     private ImageView imageView;
     private Uri uri;
+    private String nameString, emailString, passwordString;
+    private boolean aBoolean = true;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+//        Create Toolbar
+        createToolbar();
 
 //        Image Controller
         imageController();
 
     }   // Main Method
 
+    private void createToolbar() {
+
+        setHasOptionsMenu(true);
+
+        Toolbar toolbar = getView().findViewById(R.id.toolbarRegister);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+
+        ((MainActivity) getActivity()).getSupportActionBar()
+                .setTitle(getString(R.string.register_to_firebase));
+        ((MainActivity) getActivity()).getSupportActionBar()
+                .setSubtitle("Choose Image & Fill All Blank");
+
+        ((MainActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.itemUpload) {
+            uploadToFirebase();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void uploadToFirebase() {
+
+        MyAlert myAlert = new MyAlert(getActivity());
+
+        EditText nameEditText = getView().findViewById(R.id.editTextDisplayName);
+        EditText emailEditText = getView().findViewById(R.id.editTextDisplayName);
+        EditText passwordEditText = getView().findViewById(R.id.editTextDisplayName);
+
+        nameString = nameEditText.getText().toString().trim();
+        emailString = emailEditText.getText().toString().trim();
+        passwordString = passwordEditText.getText().toString().trim();
+
+        if (aBoolean) {
+            myAlert.myNormalDialog("Choose Image ?",
+                    "Please Choose Image Avata");
+        } else if (nameString.isEmpty() || emailString.isEmpty() || passwordString.isEmpty()) {
+            myAlert.myNormalDialog("Have Space",
+                    "Please Fill All Blank");
+        } else {
+
+//            upload Image To Firebase Storage
+            uploadImage();
+
+        }   //if
+
+    }   // uploadToFirebase
+
+    private void uploadImage() {
+
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference()
+                .child("Avata/" + nameString);
+
+        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.d("3AprilV1", "Upload Image Success");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("3AprilV1", "Error --> " + e.toString());
+            }
+        });
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_register, menu);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == getActivity().RESULT_OK) {
+
+            aBoolean = false;
+
 //            Success Choose Image
             try {
 
