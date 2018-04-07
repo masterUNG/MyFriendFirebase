@@ -18,15 +18,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import masterung.androidthai.in.th.myfriendfirebase.MainActivity;
 import masterung.androidthai.in.th.myfriendfirebase.R;
+import masterung.androidthai.in.th.myfriendfirebase.ServiceActivity;
 import masterung.androidthai.in.th.myfriendfirebase.utility.MyAlert;
 
 public class RegisterFragment extends Fragment {
@@ -86,8 +92,8 @@ public class RegisterFragment extends Fragment {
         MyAlert myAlert = new MyAlert(getActivity());
 
         EditText nameEditText = getView().findViewById(R.id.editTextDisplayName);
-        EditText emailEditText = getView().findViewById(R.id.editTextDisplayName);
-        EditText passwordEditText = getView().findViewById(R.id.editTextDisplayName);
+        EditText emailEditText = getView().findViewById(R.id.editTextEmail);
+        EditText passwordEditText = getView().findViewById(R.id.editTextPassword);
 
         nameString = nameEditText.getText().toString().trim();
         emailString = emailEditText.getText().toString().trim();
@@ -118,6 +124,9 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.d("3AprilV1", "Upload Image Success");
+
+                registerNewUserToFirebase();
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -126,6 +135,34 @@ public class RegisterFragment extends Fragment {
             }
         });
 
+    }
+
+    private void registerNewUserToFirebase() {
+
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(emailString, passwordString)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (task.isSuccessful()) {
+
+                            Toast.makeText(getActivity(), "Register Success",
+                                    Toast.LENGTH_SHORT).show();
+
+                            startActivity(new Intent(getActivity(), ServiceActivity.class));
+                            getActivity().finish();
+
+                        } else {
+
+                            MyAlert myAlert = new MyAlert(getActivity());
+                            myAlert.myNormalDialog("Cannot Register",
+                                    task.getException().getMessage());
+
+                        }
+
+                    }
+                });
     }
 
     @Override
