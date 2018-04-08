@@ -1,5 +1,6 @@
 package masterung.androidthai.in.th.myfriendfirebase.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -42,6 +45,7 @@ public class RegisterFragment extends Fragment {
     private Uri uri;
     private String nameString, emailString, passwordString;
     private boolean aBoolean = true;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -99,12 +103,19 @@ public class RegisterFragment extends Fragment {
         emailString = emailEditText.getText().toString().trim();
         passwordString = passwordEditText.getText().toString().trim();
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Please Wait ...");
+        progressDialog.setMessage("Process Continue wait few Minus");
+        progressDialog.show();
+
         if (aBoolean) {
             myAlert.myNormalDialog("Choose Image ?",
                     "Please Choose Image Avata");
+            progressDialog.dismiss();
         } else if (nameString.isEmpty() || emailString.isEmpty() || passwordString.isEmpty()) {
-            myAlert.myNormalDialog("Have Space",
-                    "Please Fill All Blank");
+            myAlert.myNormalDialog(getString(R.string.title_have_space),
+                    getString(R.string.message_have_space));
+            progressDialog.dismiss();
         } else {
 
 //            upload Image To Firebase Storage
@@ -150,6 +161,25 @@ public class RegisterFragment extends Fragment {
                             Toast.makeText(getActivity(), "Register Success",
                                     Toast.LENGTH_SHORT).show();
 
+//                            Setup DisplayName
+                            UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+                            builder.setDisplayName(nameString);
+                            UserProfileChangeRequest userProfileChangeRequest = builder.build();
+
+                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            firebaseUser.updateProfile(userProfileChangeRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("8AprilV1", "Update DisplayName Success");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("8AprilV1", "Cannot ==> " + e.toString());
+                                }
+                            });
+
+
                             startActivity(new Intent(getActivity(), ServiceActivity.class));
                             getActivity().finish();
 
@@ -160,6 +190,8 @@ public class RegisterFragment extends Fragment {
                                     task.getException().getMessage());
 
                         }
+
+                        progressDialog.dismiss();
 
                     }
                 });

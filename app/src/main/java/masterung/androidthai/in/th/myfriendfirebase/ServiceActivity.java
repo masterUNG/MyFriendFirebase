@@ -41,5 +41,13 @@ public class ServiceActivity extends AppCompatActivity {
     private void createToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbarService);
         setSupportActionBar(toolbar);
-    }
-}
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        getSupportActionBar().setTitle(firebaseUser.getDisplayName());
+        getSupportActionBar().setSubtitle("Login");
+
+    }   // createToolbar
+
+}   // Main Class
