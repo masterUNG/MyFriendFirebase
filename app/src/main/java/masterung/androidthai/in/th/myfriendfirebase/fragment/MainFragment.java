@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,7 @@ public class MainFragment extends Fragment {
                 String passwordString = passwordEditText.getText().toString().trim();
                 final MyAlert myAlert = new MyAlert(getActivity());
 
-                if (emailString.isEmpty() || passwordString.isEmpty()) {
+                if (TextUtils.isEmpty(emailString) || TextUtils.isEmpty(passwordString)) {
 //                    Have Space
                     myAlert.myNormalDialog(getString(R.string.title_have_space),
                             getString(R.string.message_have_space));

@@ -43,7 +43,7 @@ public class RegisterFragment extends Fragment {
     //    Explicit
     private ImageView imageView;
     private Uri uri;
-    private String nameString, emailString, passwordString;
+    private String nameString, emailString, passwordString, photoURLString;
     private boolean aBoolean = true;
     private ProgressDialog progressDialog;
 
@@ -136,6 +136,8 @@ public class RegisterFragment extends Fragment {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.d("3AprilV1", "Upload Image Success");
 
+                findPhotoURLonFirebase();
+
                 registerNewUserToFirebase();
 
             }
@@ -145,6 +147,22 @@ public class RegisterFragment extends Fragment {
                 Log.d("3AprilV1", "Error --> " + e.toString());
             }
         });
+
+    }
+
+    private void findPhotoURLonFirebase() {
+
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference();
+        storageReference.child("Avata/" + nameString)
+                .getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        photoURLString = uri.toString();
+                        Log.d("9AprilV1", "photoURL ==> " + photoURLString);
+                    }
+                });
 
     }
 
