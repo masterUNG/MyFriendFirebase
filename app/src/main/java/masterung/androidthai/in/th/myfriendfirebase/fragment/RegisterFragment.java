@@ -29,6 +29,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,6 +39,7 @@ import masterung.androidthai.in.th.myfriendfirebase.MainActivity;
 import masterung.androidthai.in.th.myfriendfirebase.R;
 import masterung.androidthai.in.th.myfriendfirebase.ServiceActivity;
 import masterung.androidthai.in.th.myfriendfirebase.utility.MyAlert;
+import masterung.androidthai.in.th.myfriendfirebase.utility.UserModel;
 
 public class RegisterFragment extends Fragment {
 
@@ -189,6 +192,10 @@ public class RegisterFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d("8AprilV1", "Update DisplayName Success");
+
+//                                    Update Value to Database Firebase
+                                    updateValueToDatabaseFirebase();
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -213,6 +220,52 @@ public class RegisterFragment extends Fragment {
 
                     }
                 });
+    }
+
+    private void updateValueToDatabaseFirebase() {
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        String uidUserString = firebaseUser.getUid();
+
+//        Check Value
+        String tag = "10AprilV1";
+        Log.d(tag, "Email ==> " + emailString);
+        Log.d(tag, "DisplayName ==> " + nameString);
+        Log.d(tag, "PhotoUrl ==> " + photoURLString);
+        Log.d(tag, "UidUser ==> " + uidUserString);
+
+//        Setter to Model
+        UserModel userModel = new UserModel(emailString, nameString,
+                photoURLString, uidUserString);
+
+//        Connected Database Firebase
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference()
+                .child("User")
+                .child(uidUserString);
+
+        databaseReference.setValue(userModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        startActivity(new Intent(getActivity(), ServiceActivity.class));
+                        getActivity().finish();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Cannot Register ==> " + e.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
     }
 
     @Override

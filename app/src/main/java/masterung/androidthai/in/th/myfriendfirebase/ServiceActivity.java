@@ -1,5 +1,6 @@
 package masterung.androidthai.in.th.myfriendfirebase;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,10 @@ public class ServiceActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.itemSignOut) {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
             firebaseAuth.signOut();
+
+            startActivity(new Intent(ServiceActivity.this, MainActivity.class));
+            finish();
+
         }
 
         return super.onOptionsItemSelected(item);
