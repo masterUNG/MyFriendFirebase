@@ -250,9 +250,6 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
 
-                        startActivity(new Intent(getActivity(), ServiceActivity.class));
-                        getActivity().finish();
-
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
