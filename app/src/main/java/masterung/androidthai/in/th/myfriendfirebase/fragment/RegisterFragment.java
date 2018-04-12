@@ -169,6 +169,8 @@ public class RegisterFragment extends Fragment {
 
     }
 
+    
+
     private void registerNewUserToFirebase() {
 
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -258,11 +260,6 @@ public class RegisterFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
-
     }
 
     @Override
