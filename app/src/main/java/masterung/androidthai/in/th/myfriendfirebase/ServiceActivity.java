@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import masterung.androidthai.in.th.myfriendfirebase.fragment.ShowAllUserFragment;
+
 public class ServiceActivity extends AppCompatActivity {
 
     @Override
@@ -19,6 +21,15 @@ public class ServiceActivity extends AppCompatActivity {
 
 //        Create Toolbar
         createToolbar();
+
+//        Add Fragment
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.contentServiceFragement, new ShowAllUserFragment())
+                    .commit();
+        }
+
 
     }
 

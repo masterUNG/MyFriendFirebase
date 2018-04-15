@@ -56,6 +56,7 @@ public class ReadAllUserAdapter extends RecyclerView.Adapter<ReadAllUserAdapter.
 //        Show Icon
         Picasso.get()
                 .load(urlIconString)
+                .resize(100, 100)
                 .into(holder.circleImageView);
 
 

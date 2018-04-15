@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:padding="16dp"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:padding="@dimen/margin16"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/my_height">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <!--Display Name-->
         <TextView
@@ -20,7 +21,6 @@
 
         <!--Email-->
         <TextView
-            android:layout_below="@+id/txtDisplayName"
             android:textColor="@color/colorPrimaryDark"
             android:id="@+id/txtEmail"
             android:textStyle="italic"
@@ -29,14 +29,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <!--Photo-->
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_gravity="right"
             android:id="@+id/circleImageView"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:layout_width="@dimen/icon"
             android:layout_height="@dimen/icon" />
 
-    </RelativeLayout>
+    </LinearLayout>
+
+
+
+
 
 </LinearLayout>
